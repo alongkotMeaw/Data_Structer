@@ -8,7 +8,6 @@ typedef struct Node {
 } Node;
 
 Node* head = NULL;
-
 void insertAtBeginning(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
@@ -25,6 +24,11 @@ void insertAtPosition(int pos, int data) {
     } else {
         Node* temp = head;
         for (int i = 0; i < pos - 1; i++) {
+            if (temp == NULL) {
+                printf("Position out of range\n");
+                free(newNode);
+                return;
+            }
             temp = temp->next;
         }
         newNode->next = temp->next;
@@ -33,12 +37,16 @@ void insertAtPosition(int pos, int data) {
 }
 
 void insertAtEnd(int data) {
+    // Create a new node
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
     newNode->next = NULL;
+
+
     if (head == NULL) {
         head = newNode;
     } else {
+
         Node* temp = head;
         while (temp->next != NULL) {
             temp = temp->next;
@@ -47,21 +55,24 @@ void insertAtEnd(int data) {
     }
 }
 
+
+
 void printList() {
     Node* temp = head;
     while (temp != NULL) {
         printf("%d", temp->data);
         temp = temp->next;
+        /*
         if (temp != NULL) {
             printf(" ");
-        }
+        }*/
     }
-    printf("\n");
+
 }
 
 int searchList(int data) {
     Node* temp = head;
-    int pos = 0;
+    int pos = 1;
     while (temp != NULL) {
         if (temp->data == data) {
             return pos;
@@ -73,29 +84,71 @@ int searchList(int data) {
 }
 
 int main() {
-    int num;
-    char input[30] = "N1IF0";
-    //scanf("%s",&input);
-    char* token = strtok(input, "NIALF");
-    while (token != NULL) {
-            num =atoi(token);
-            if(input[i] == 'N'){
-
-
-            }else if(input[i] == I){
-                if(input[i+1] == 'F'){
-
-                }
-                else if(input[i+1] == 'A'){
-
-                }else if(input[i+1] == 'L')
+    char input[30];//= "N3IF5IL2IF7IA29PS0S9";
+    int i = 0;
+    scanf("%s",input);
+    while (i < strlen(input)) {
+        if (input[i] == 'N') {
+            i++;
+            int num = 0;
+            while (i < strlen(input) && input[i] >= '0' && input[i] <= '9') {
+                num = num * 10 + (input[i] - '0');
+                i++;
             }
-            token = strtok(NULL, "NIALF");
+            insertAtBeginning(num);
+        } else if (input[i] == 'I') {
+            i++;
+            if (input[i] == 'F') {
+                i++;
+                int num = 0;
+                while (i < strlen(input) && input[i] >= '0' && input[i] <= '9') {
+                    num = num * 10 + (input[i] - '0');
+                    i++;
+                }
+                insertAtBeginning(num);
+            }
+
+            else if (input[i] == 'L') {
+                i++;
+                int num = 0;
+                while (i < strlen(input) && input[i] >= '0' && input[i] <= '9') {
+                    num = num * 10 + (input[i] - '0');
+                    i++;
+                }
+                insertAtEnd(num);
+            }
+
+            else if (input[i] == 'A') {
+                i++;
+                int pos = 0;
+                    pos = input[i] - '0';
+                    i++;
+                    //printf("check  Position = %d\n",pos);
+                int num = 0;
+                while (i < strlen(input) && input[i] >= '0' && input[i] <= '9') {
+                    num = num * 10 + (input[i] - '0');
+                    i++;
+                }
+                //printf("check  num = %d\n",num);
+                insertAtPosition(pos, num);
+            }
+        }else if(input[i] == 'P'){
+            i++;
             printList();
 
-
+        }else if(input[i] == 'S'){
+            i++;
+            int num = 0;
+            while (i < strlen(input) && input[i] >= '0' && input[i] <= '9') {
+                num = num * 10 + (input[i] - '0');
+                i++;
+            }
+            int result = searchList(num);
+            printf("%d",result);
+            //printf("i == %d ====== %d",i,strlen(input));
+            //break;
+        }
     }
 
     return 0;
 }
-
