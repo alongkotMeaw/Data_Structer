@@ -1,41 +1,41 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 typedef struct node
 {
- int data;
- struct node *next;
-}node;
-node *head=NULL;
+   int data;
+   struct node *next;
+} node;
+node *head = NULL;
 
-node* newNode(int v)
+node *newNode(int v)
 {
- node *new_node;
-new_node=(node*)malloc(sizeof(node));
- new_node->data = v;
- new_node->next=NULL;
+   node *new_node;
+   new_node = (node *)malloc(sizeof(node));
+   new_node->data = v;
+   new_node->next = NULL;
 
- return new_node;
+   return new_node;
 }
 
-void DisplayLL() //¿Ñ§ªÑ¹¹ÕéãËé·ÓÍÐäÃ
+void DisplayLL() // ï¿½Ñ§ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 {
-    struct node *ptr;
-    ptr = head;
-    while(ptr != NULL){
-       printf("Node val= %d \n", ptr -> data);
-      ptr = ptr -> next;
+   struct node *ptr;
+   ptr = head;
+   while (ptr != NULL)
+   {
+      printf("Node val= %d \n", ptr->data);
+      ptr = ptr->next;
    }
    printf("\n");
-
 }
 
 int main()
 {
- head=newNode(1);
- head->next = newNode(2);
- head->next->next = newNode(3);
- head->next->next->next = newNode(4);
+   head = newNode(1);
+   head->next = newNode(2);
+   head->next->next = newNode(3);
+   head->next->next->next = newNode(4);
 
- DisplayLL();
- return 0;
+   DisplayLL();
+   return 0;
 }
