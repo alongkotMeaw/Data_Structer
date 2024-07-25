@@ -48,14 +48,14 @@ void add_newnode(int value_newnode) {
     new_node->data = value_newnode;
     new_node->next = NULL;
 
-    // Special case for the head end
+  
     if (head == NULL || head->data >= value_newnode) {
         new_node->next = head;
         head = new_node;
         return;
     }
 
-    // Locate the node before the point of insertion
+    
     struct node *current = head;
     while (current->next != NULL && current->next->data < value_newnode) {
         current = current->next;
