@@ -14,7 +14,14 @@ void insertAtBeginning(int data)
 {
     Node *newNode = (Node *)malloc(sizeof(Node));
     newNode->data = data;
+    newNode->prev = NULL;
     newNode->next = head;
+
+    if (head != NULL)
+    {
+        head->prev = newNode;
+    }
+
     head = newNode;
 }
 
@@ -25,6 +32,7 @@ void insertAtPosition(int pos, int data)
     if (pos == 0)
     {
         newNode->next = head;
+        newNode->prev = NULL;
         head = newNode;
     }
     else
@@ -41,6 +49,8 @@ void insertAtPosition(int pos, int data)
             temp = temp->next;
         }
         newNode->next = temp->next;
+        newNode->prev = temp;
+        temp->next->prev = newNode;
         temp->next = newNode;
     }
 }
@@ -51,6 +61,7 @@ void insertAtEnd(int data)
     Node *newNode = (Node *)malloc(sizeof(Node));
     newNode->data = data;
     newNode->next = NULL;
+    newNode->prev = NULL; // Initialize prev to NULL
 
     if (head == NULL)
     {
@@ -58,13 +69,13 @@ void insertAtEnd(int data)
     }
     else
     {
-
         Node *temp = head;
         while (temp->next != NULL)
         {
             temp = temp->next;
         }
         temp->next = newNode;
+        newNode->prev = temp;
     }
 }
 
@@ -75,10 +86,19 @@ void printList()
     {
         printf("%d", temp->data);
         temp = temp->next;
-        /*
-        if (temp != NULL) {
-            printf(" ");
-        }*/
+    }
+}
+
+void printList_revert()
+{
+    Node *temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    while (temp != NULL)
+    {
+        printf("%d", temp->data);
+        temp = temp->prev;
     }
 }
 
@@ -98,11 +118,73 @@ int searchList(int data)
     return -1;
 }
 
+void deleteAtStart()
+{
+    Node *ptr = head;
+    head = ptr->next;
+    head->prev = NULL;
+    free(ptr);
+}
+
+void deleteAtEnd()
+{
+    Node *temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->prev->next = NULL;
+    temp->next = NULL;
+    free(temp);
+}
+/*
+void deleteAtPosition(int pos) {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    struct Node *temp = head;
+    if (pos == 0) {
+        head = head->next;
+        if (head != NULL) {
+            head->prev = NULL;
+        }
+        free(temp);
+        return;
+    }
+
+    for (int i = 0; temp != NULL && i < pos; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Position out of range\n");
+        return;
+    }
+
+    // is not the last node
+    if (temp->next != NULL) {
+        temp->next->prev = temp->prev;
+    }
+
+    //is not the first node
+    if (temp->prev != NULL) {
+        temp->prev->next = temp->next;
+    }
+
+    // only node in the list
+    if (temp->prev == NULL && temp->next == NULL) {
+        head = NULL;
+    }
+
+    free(temp);
+}
+*/
+
 int main()
 {
-    char input[30]; //= "N3IF5IL2IF7IA29PS0S9";
+    char input[30] = "N1N2N3DA21P";
     int i = 0;
-    scanf("%s", input);
+    // scanf("%s", input);
     while (i < strlen(input))
     {
         if (input[i] == 'N')
@@ -160,11 +242,40 @@ int main()
                 insertAtPosition(pos, num);
             }
         }
+        else if (input[i] == 'D')
+        {
+            // printf("check 1");
+            i++;
+            if (input[i] == 'F')
+            {
+                i++;
+                deleteAtStart();
+            }
+            else if (input[i] == 'L')
+            {
+                i++;
+                deleteAtEnd();
+            }
+            /*
+            else if(input[i] == 'A'){
+             i++;
+               int pos = 0;
+               pos = input[i] - '0';
+               //printf("pos = %d",pos);
+               deleteAtPosition(pos);
+            }*/
+        }
         else if (input[i] == 'P')
         {
             i++;
             printList();
         }
+        else if (input[i] == 'R')
+        {
+            i++;
+            printList_revert();
+        }
+
         else if (input[i] == 'S')
         {
             i++;
