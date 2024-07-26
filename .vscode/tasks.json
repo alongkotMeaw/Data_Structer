@@ -2,20 +2,27 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "upload and build",
             "type": "shell",
-            "command": "gcc",
+            "command": "scp",
             "args": [
-                "-g",
                 "${file}",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "meama@10.35.130.66:~/projects/algorithm/${fileBasename}"
             ],
             "group": "build",
-            "problemMatcher": [
-                "$gcc"
+            "problemMatcher": [],
+            "dependsOn": "build on pi"
+        },
+        {
+            "label": "build on pi",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "meama@10.35.130.66",
+                "gcc -o ~/projects/algorithm/${fileBasenameNoExtension} ~/projects/algorithm/${fileBasename}"
             ],
-            "detail": "Generated task by Visual Studio Code."
+            "group": "none",
+            "problemMatcher": []
         },
         {
             "type": "cppbuild",
