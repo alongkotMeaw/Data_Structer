@@ -10,6 +10,7 @@ typedef struct Node
 } Node;
 
 Node *head = NULL;
+
 void insertAtBeginning(int data)
 {
     Node *newNode = (Node *)malloc(sizeof(Node));
@@ -29,42 +30,49 @@ void insertAtPosition(int pos, int data)
 {
     Node *newNode = (Node *)malloc(sizeof(Node));
     newNode->data = data;
-    if (pos == 0)
+    /*
+    if (pos == 1)
     {
         newNode->next = head;
         newNode->prev = NULL;
+        if (head != NULL)
+        {
+            head->prev = newNode;
+        }
         head = newNode;
     }
     else
+    {*/
+    Node *temp = head;
+    for (int i = 1; i < pos; i++)
     {
-        Node *temp = head;
-        for (int i = 0; i < pos - 1; i++)
+        if (temp == NULL)
         {
-            if (temp == NULL)
-            {
-                printf("Position out of range\n");
-                free(newNode);
-                return;
-            }
-            temp = temp->next;
+            printf("Position out of range\n");
+            free(newNode);
+            return;
         }
-        newNode->next = temp->next;
-        newNode->prev = temp;
-        temp->next->prev = newNode;
-        temp->next = newNode;
+        temp = temp->next;
     }
+    if (temp->next != NULL)
+    {
+        temp->next->prev = newNode;
+    }
+    newNode->next = temp->next;
+    newNode->prev = temp;
+    temp->next = newNode;
+    //}
 }
 
 void insertAtEnd(int data)
 {
-    // Create a new node
     Node *newNode = (Node *)malloc(sizeof(Node));
     newNode->data = data;
     newNode->next = NULL;
-    newNode->prev = NULL; // Initialize prev to NULL
 
     if (head == NULL)
     {
+        newNode->prev = NULL;
         head = newNode;
     }
     else
@@ -92,6 +100,9 @@ void printList()
 void printList_revert()
 {
     Node *temp = head;
+    if (temp == NULL)
+        return;
+
     while (temp->next != NULL)
         temp = temp->next;
 
@@ -120,44 +131,82 @@ int searchList(int data)
 
 void deleteAtStart()
 {
+    if (head == NULL)
+        return;
+
     Node *ptr = head;
     head = ptr->next;
-    head->prev = NULL;
+    if (head != NULL)
+    {
+        head->prev = NULL;
+    }
     free(ptr);
 }
 
 void deleteAtEnd()
 {
+    if (head == NULL)
+        return;
+
     Node *temp = head;
     while (temp->next != NULL)
         temp = temp->next;
-    temp->prev->next = NULL;
-    temp->next = NULL;
+
+    if (temp->prev != NULL)
+    {
+        temp->prev->next = NULL;
+    }
+    else
+    {
+        head = NULL;
+    }
     free(temp);
 }
 
-void deleteAtPosition(int pos) {
-    struct Node *temp = head;
-    
+void deleteAtPosition(int pos)
+{
+    // pos =- 1;
+    if (head == NULL)
+        return;
 
-    for (int i = 0; temp != NULL && i < pos - 1; i++) {//-1 for fix index
+    Node *temp = head;
+    if (pos - 1 == 0)
+    {
+        head = temp->next;
+        if (head != NULL)
+        {
+            head->prev = NULL;
+        }
+        free(temp);
+        return;
+    }
+
+    for (int i = 0; temp != NULL && i < pos - 1; i++)
+    {
         temp = temp->next;
     }
-    //printf("temp delete = %d",temp->data);
-    
-    temp->next->prev = temp->prev;
-    temp->prev->next = temp->next;
-    temp->prev = NULL;
-    temp->next = NULL;
+
+    if (temp == NULL)
+        return;
+
+    if (temp->next != NULL)
+    {
+        temp->next->prev = temp->prev;
+    }
+
+    if (temp->prev != NULL)
+    {
+        temp->prev->next = temp->next;
+    }
+
     free(temp);
 }
-
 
 int main()
 {
-    char input[30] = "N1N2N3PDA2P";
+    char input[30]; //= "N3IF5IL2IF6PDA2DA2R";
     int i = 0;
-    // scanf("%s", input);
+    scanf("%s", input);
     while (i < strlen(input))
     {
         if (input[i] == 'N')
@@ -185,7 +234,6 @@ int main()
                 }
                 insertAtBeginning(num);
             }
-
             else if (input[i] == 'L')
             {
                 i++;
@@ -197,27 +245,23 @@ int main()
                 }
                 insertAtEnd(num);
             }
-
             else if (input[i] == 'A')
             {
                 i++;
                 int pos = 0;
                 pos = input[i] - '0';
                 i++;
-                //printf("check  Position = %d\n",pos);
                 int num = 0;
                 while (i < strlen(input) && input[i] >= '0' && input[i] <= '9')
                 {
                     num = num * 10 + (input[i] - '0');
                     i++;
                 }
-                // printf("check  num = %d\n",num);
                 insertAtPosition(pos, num);
             }
         }
         else if (input[i] == 'D')
         {
-            // printf("check 1");
             i++;
             if (input[i] == 'F')
             {
@@ -229,14 +273,13 @@ int main()
                 i++;
                 deleteAtEnd();
             }
-            
-            else if(input[i] == 'A'){
-             i++;
-               int pos = 0;
-               pos = input[i] - '0';
-               i++;
-               //printf("pos = %d",pos);
-               deleteAtPosition(pos);
+            else if (input[i] == 'A')
+            {
+                i++;
+                int pos = 0;
+                pos = input[i] - '0';
+                i++;
+                deleteAtPosition(pos);
             }
         }
         else if (input[i] == 'P')
@@ -249,7 +292,6 @@ int main()
             i++;
             printList_revert();
         }
-
         else if (input[i] == 'S')
         {
             i++;
@@ -261,8 +303,6 @@ int main()
             }
             int result = searchList(num);
             printf("%d", result);
-            // printf("i == %d ====== %d",i,strlen(input));
-            // break;
         }
     }
 

@@ -12,7 +12,7 @@
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
-      "miDebuggerPath": "/usr/bin/gdb",
+      "miDebuggerServerAddress": "10.35.130.66:1234",
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
@@ -28,24 +28,6 @@
         "programOutput": true,
         "exceptions": true
       }
-    },
-    {
-      "type": "cppdbg",
-      "request": "launch",
-      "args": [],
-      "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "~/projects/algorithm ",
-      "program": "~/projects/algorithm /lap5_5",
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
     },
     {
       "name": "C/C++ Runner: Debug Session",
