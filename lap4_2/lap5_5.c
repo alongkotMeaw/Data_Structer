@@ -145,6 +145,8 @@ void deleteAtPosition(int pos) {
     }
     temp->next->prev = temp->prev;
     temp->prev->next = temp->next;
+    temp->prev = NULL;
+    temp->next = NULL:
     free(temp);
 }
 
