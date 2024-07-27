@@ -135,50 +135,19 @@ void deleteAtEnd()
     temp->next = NULL;
     free(temp);
 }
-/*
-void deleteAtPosition(int pos) {
-    if (head == NULL) {
-        printf("List is empty\n");
-        return;
-    }
 
+void deleteAtPosition(int pos) {
     struct Node *temp = head;
-    if (pos == 0) {
-        head = head->next;
-        if (head != NULL) {
-            head->prev = NULL;
-        }
-        free(temp);
-        return;
-    }
+    
 
     for (int i = 0; temp != NULL && i < pos; i++) {
         temp = temp->next;
     }
-
-    if (temp == NULL) {
-        printf("Position out of range\n");
-        return;
-    }
-
-    // is not the last node
-    if (temp->next != NULL) {
-        temp->next->prev = temp->prev;
-    }
-
-    //is not the first node
-    if (temp->prev != NULL) {
-        temp->prev->next = temp->next;
-    }
-
-    // only node in the list
-    if (temp->prev == NULL && temp->next == NULL) {
-        head = NULL;
-    }
-
+    temp->next->prev = temp->prev;
+    temp->prev->next = temp->next;
     free(temp);
 }
-*/
+
 
 int main()
 {
@@ -256,14 +225,14 @@ int main()
                 i++;
                 deleteAtEnd();
             }
-            /*
+            
             else if(input[i] == 'A'){
              i++;
                int pos = 0;
                pos = input[i] - '0';
                //printf("pos = %d",pos);
                deleteAtPosition(pos);
-            }*/
+            }
         }
         else if (input[i] == 'P')
         {
