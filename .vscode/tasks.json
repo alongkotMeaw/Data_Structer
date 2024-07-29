@@ -1,29 +1,53 @@
 {
     "version": "2.0.0",
     "tasks": [
-      {
-        "label": "upload and build",
-        "type": "shell",
-        "command": "scp",
-        "args": [
-          "${file}",
-          "meama@10.35.130.66:~/projects/algorithm/${fileBasename}"
-        ],
-        "group": "build",
-        "problemMatcher": [],
-        "dependsOn": "build on pi"
-      },
-      {
-        "label": "build on pi",
-        "type": "shell",
-        "command": "ssh",
-        "args": [
-          "meama@10.35.130.66",
-          "gcc -o ~/projects/algorithm/${fileBasenameNoExtension} ~/projects/algorithm/${fileBasename}"
-        ],
-        "group": "none",
-        "problemMatcher": []
-      }
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "scp",
+            "args": [
+                "${file}",
+                "alongkot@192.168.137.22:/home/alongkot/${fileBasename}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Copy file to Raspberry Pi"
+        },
+        {
+            "label": "compile",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "alongkot@192.168.137.22",
+                "gcc -o /home/alongkot/${fileBasenameNoExtension} /home/alongkot/${fileBasename}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": "build",
+            "detail": "Compile on Raspberry Pi"
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "alongkot@192.168.137.22",
+                "/home/alongkot/${fileBasenameNoExtension}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "dependsOn": "compile",
+            "detail": "Run on Raspberry Pi"
+        }
     ]
-  }
-  
+}

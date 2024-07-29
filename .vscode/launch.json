@@ -2,17 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run on Raspberry Pi",
+      "name": "C/C++: gcc build and run on Raspberry Pi",
       "type": "cppdbg",
       "request": "launch",
-      "program": "/home/meama/projects/algorithm/lap5_5",
+      "program": "/home/alongkot/${fileBasenameNoExtension}",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "/home/meama/projects/algorithm",
+      "cwd": "/home/alongkot",
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
-      "miDebuggerServerAddress": "10.35.130.66:1234",
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
@@ -20,13 +19,12 @@
           "ignoreFailures": true
         }
       ],
-      "preLaunchTask": "upload and build",
+      "preLaunchTask": "build",
+      "miDebuggerPath": "/usr/bin/gdb",
       "logging": {
         "trace": true,
         "traceResponse": true,
-        "engineLogging": true,
-        "programOutput": true,
-        "exceptions": true
+        "engineLogging": true
       }
     },
     {
@@ -36,8 +34,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/meama/OneDrive/Desktop/algorithm/lap4_2",
-      "program": "c:/Users/meama/OneDrive/Desktop/algorithm/lap4_2/build/Debug/outDebug",
+      "cwd": "c:/Users/meama/OneDrive/Desktop/algorithm/run setion",
+      "program": "c:/Users/meama/OneDrive/Desktop/algorithm/run setion/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
