@@ -1,55 +1,94 @@
 #include <stdio.h>
-
-int check_palindrom(char *s) // check_palindrom
+#include <stdlib.h>
+// Declare structure of Linked List
+struct polynode
 {
-    int i, j;
-    for (i = 0; s[i]; i++)
-        ;
-
-    for (i = i - 1, j = 0; i > j; i--, j++)
-        if (s[i] != s[j])
-            return 0;
-    if (s[i] == s[j])
-        return 1;
-}
-
-int checkPrime(int num)
-{ // chek that prime
-    for (int i = 2; i * i <= num; i++)
-    {
-        if (num % i == 0)
-        {
-            return 0;
-        }
-    }
-    return 1;
-}
-
-int Primes(int num, int j)
+    int coef;
+    int exp;
+    struct polynode *next;
+};
+struct polynode *head1 = NULL;
+struct polynode *head2 = NULL;
+struct polynode *head3 = NULL;
+// Display all element in linked list
+void displayPoly(struct polynode *head)
 {
-    int cont = 2;
-    for (int i = num; cont < num; i = i + j)
+    struct polynode *ptr = head;
+    while (ptr != NULL)
     {
-        if (checkPrime(i))
-        {
-            // printf("%d\n",i);
-            char str[11]; // max int is 2147483647 need 11 index to stall
-            sprintf(str, "%d", i);
-            if (check_palindrom(str))
-                return i;
-            // cont++;
-        }
+        printf("%d", ptr->coef);
+        ptr = ptr->next;
     }
 }
+// Compare degree of exponential, return
+/*
+values are 0, 1,‐1 int compareExp(int e1, int e2)
+{
+}
+*/
+// Create new node
+struct polynode *createNode(int e, int c)
+{
+    struct polynode *new_node;
+    new_node = (struct polynode *)
+        malloc(sizeof(struct polynode));
+    new_node‐ > exp = e;
+    new_node‐ > coef = c;
+    new_node‐ > next = NULL;
 
+    return new_node;
+}
 int main()
 {
-    int quant = 5;
-    // scanf("%d", &quant);
-    int primeMin = Primes(quant, -1);
-    int primeMax = Primes(quant, 1);
-    if (primeMax - quant >= quant - primeMin)
-        printf("%d", primeMin);
-    else
-        printf("%d", primeMax);
+
+    struct polynode *p1 = NULL, *p2 = NULL, *p3 = NULL;
+    struct polynode *new_node;
+    int i, n = 5;
+    int a1[] = {6, 2, 3, 8, 0};    // 1st polynomial
+    int a2[] = {‐3, 18, 0, 0, 23}; // 2nd polynomial
+
+    // Create linked list for representing polynomial
+    // Loop for create 1st polynomial (add node at beginning)
+
+    for (i = 1; i < n; i++)
+    {
+        Node *newNode = (Node *)malloc(sizeof(Node));
+        newNode->coef = a[i];
+        newNode->exp = n - i;
+        newNode->next = head1;
+        head1 = newNode;
+    }
+    printf("1st Polynomial: ");
+    displayPoly(head1);
+
+    // Loop for create 2nd polynomial (add node at beginning)
+    for (i = 0; i < n; i++)
+    {
+    }
+    printf("2nd Polynomial: ");
+    displayPoly(head2);
+
+    // add two polynomial numbers
+    p1 = head1;
+    p2 = head2;
+    p3 = head3;
+    while (p1 != NULL && p2 != NULL)
+    {
+        // fill‐in some statements for each case
+        switch (compareExp(p1‐ > exp, p2‐ > exp))
+        {
+        case 0:
+        case 1:
+        case ‐1:
+        }
+
+        // create new node and add it in the resulted polynomial
+    }
+
+    // check whether p1 is not null, Loop for creating new nodeand add it in the resulted polynomial
+    // check whether p2 is not null, Loop for creating new nodeand add it in the resulted polynomial
+
+    printf("\n Added Polynomial:\n ");
+    displayPoly(head3);
+    return 0;
 }
