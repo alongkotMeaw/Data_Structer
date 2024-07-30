@@ -22,6 +22,8 @@ void displayPoly(struct polynode *head)
             printf("%d", ptr->coef);
         else if (ptr->coef == 0)
             ;
+        else if (ptr->exp == 1)
+            printf("%dx", ptr->coef);
         else
             printf("%dX^%d", ptr->coef, ptr->exp);
         if (ptr->next != NULL && ptr != head)
