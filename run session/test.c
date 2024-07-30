@@ -59,12 +59,33 @@ struct polynode *createNode(int e, int c)
 
 int main()
 {
-
+    int size_a1 = 1, size_a2 = 1;
     struct polynode *p1 = NULL, *p2 = NULL, *p3 = NULL;
     struct polynode *new_node;
+    // 1st polynomial
+    int *a1 = (int *)malloc(size_a1 * sizeof(int));
+    printf("==== Create 1st Polynomial ====\n");
+    do
+    {
+        printf("Enter exponential 1:");
+        scanf("%d", &a1[size_a1]);
+        printf("a1 == %d", a1[size_a1]);
+        size_a1++;
+        a1 = (int *)realloc(a1, size_a1 * sizeof(int));
+    } while (a1[size_a1] > -1);
+
+    // 2st polynomial
+    int *a2 = (int *)malloc(size_a2 * sizeof(int));
+    printf("==== Create 2nd Polynomial ====\n");
+    do
+    {
+        printf("Enter exponential 2:");
+        scanf("%d", &a2[size_a1 - 1]);
+        size_a2++;
+        a2 = (int *)realloc(a2, size_a2 * sizeof(int));
+    } while (a2[size_a1 - 1] > -1);
+
     int i, n = 5;
-    int a1[] = {6, 2, 3, 8, 0};    // 1st polynomial
-    int a2[] = {-3, 18, 0, 0, 23}; // 2nd polynomial
 
     // Create linked list for representing polynomial
     // Loop for create 1st polynomial (add node at beginning)
