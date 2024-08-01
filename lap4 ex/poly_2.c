@@ -106,8 +106,6 @@ int main()
     // sort exponential
 
     bubbleSort(a1, size_a1);
-    for (int i = 0; i < size_a1; i++)
-        printf("%d ", a1[i]);
     printf("size a1 = %d", size_a1);
     // asian in linklist
     struct polynode *head1 = createNode(a1[size_a1 - 1], (rand() % 30 + 1));

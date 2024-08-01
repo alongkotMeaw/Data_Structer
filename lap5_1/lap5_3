@@ -17,7 +17,7 @@ struct contact *createNode(char name[], char number[])
     strcpy(new_node->name, name);
     strcpy(new_node->number, number);
 
-    // new_node->next=NULL;
+    new_node->next = NULL;
     return new_node;
 }
 
@@ -41,12 +41,12 @@ void searchList(struct contact *head, char name[])
     {
         if (!strcmp(name, ptr->name))
         {
-            printf("%s 's number is %s", ptr->name, ptr->name);
+            printf("%s 's number is %s\n", ptr->name, ptr->number);
             return;
         }
         ptr = ptr->next;
     }
-    printf("Not found %s in the contact list", name);
+    printf("Not found %s in the contact list\n", name);
 }
 
 int main()
@@ -87,8 +87,8 @@ int main()
 
             // insert node into Linkedlist at head
             struct contact *ptr = createNode(name, number);
-            hash_table[k] = ptr;
             ptr->next = hash_table[k];
+            hash_table[k] = ptr;
         }
         else if (n == 2)
         {
