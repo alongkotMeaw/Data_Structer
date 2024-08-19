@@ -7,7 +7,7 @@
             "command": "scp",
             "args": [
                 "${file}",
-                "alongkot@10.35.130.66:/home/alongkot/${fileBasename}"
+                "alongkot@10.35.130.24:/home/alongkot/${fileBasename}"
             ],
             "group": "build",
             "problemMatcher": [],
@@ -18,7 +18,7 @@
             "type": "shell",
             "command": "ssh",
             "args": [
-                "alongkot@10.35.130.66",
+                "alongkot@10.35.130.24",
                 "gcc -o /home/alongkot/${fileBasenameNoExtension} /home/alongkot/${fileBasename}"
             ],
             "group": "build",
@@ -33,7 +33,7 @@
             "type": "shell",
             "command": "ssh",
             "args": [
-                "alongkot@10.35.130.66",
+                "alongkot@10.35.130.24",
                 "/home/alongkot/${fileBasenameNoExtension}"
             ],
             "group": {
