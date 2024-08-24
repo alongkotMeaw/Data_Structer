@@ -9,17 +9,11 @@ typedef struct Node
 node *Front = NULL;
 node *Rear = NULL;
 
-node *createnode(int data)
+void enqueue(int data)
 {
     node *newNode = (node *)malloc(sizeof(node));
     newNode->data = data;
     newNode->next = NULL;
-    return newNode;
-}
-
-void enqueue(int data)
-{
-    node *newNode = createnode(data);
     if (Rear == NULL)
     {
         Front = newNode;
