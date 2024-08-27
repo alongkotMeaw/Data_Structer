@@ -36,6 +36,7 @@ int pop(int data)
         free(ptr);
     }
 }
+
 int display()
 {
     int count = 0;
