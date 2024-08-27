@@ -81,13 +81,20 @@ int main()
         for (i = 0; i < 10; i++)
             hash_table[i] = NULL;
 
-        printf("Number after sorting %d\n", lp);
+        /*printf("Number after sorting %d\n", lp);
         for (i = 0; i < n; i++)
         {
             printf("%d ", num[i]);
         }
-        n_mod = n_mod * 10;
+
         printf("\n");
+        */
+        n_mod = n_mod * 10;
+    }
+    printf("Number after sorting\n");
+    for (i = 0; i < n; i++)
+    {
+        printf("%d ", num[i]);
     }
 
     return 0;
