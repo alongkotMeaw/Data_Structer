@@ -14,7 +14,7 @@ node *hash_table[10];
 
 void insertChain(int value)
 {
-    printf("value inserct to chain = %d\n", value);
+    // printf("value inserct to chain = %d\n", value);
     node *new_node = (node *)malloc(sizeof(node));
     new_node->data = value;
     new_node->next = NULL;
@@ -23,8 +23,7 @@ void insertChain(int value)
     {
         index = value % max;
     }
-    index = ((value % n_mod - value % (n_mod / 10)) / (n_mod / 10)) % max;
-
+    index = ((value % n_mod - value % (n_mod / 10)) / (n_mod / 10)) % max; // 2.30 hours for this (;´༎ຶД༎ຶ`)
     if (hash_table[index] == NULL)
     {
         hash_table[index] = new_node;
