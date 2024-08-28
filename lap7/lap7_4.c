@@ -1,37 +1,33 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+//                                      in progress   A72Bb27A
 int checck = 1;
 typedef struct node
 {
     char data;
     struct node *next;
 } node;
+
 node *Top = NULL;
 
 void push(char data)
 {
-    printf("push -- %c\n", data);
+    data = tolower(data);
     node *new_node = (node *)malloc(sizeof(node));
     new_node->data = data;
-    if (Top == NULL)
-    {
-        new_node->next = NULL;
-        Top = new_node;
-    }
-    else
-    {
-        new_node->next = Top;
-        Top = new_node;
-    }
+    new_node->next = Top;
+    Top = new_node;
 }
 
-int pop(char data)
+void pop(char data)
 {
-    printf("pop -- %c\n", Top->data);
+    data = tolower(data);
     if (Top == NULL || data != Top->data)
+    {
         checck = 0;
+    }
     else
     {
         node *ptr = Top;
@@ -42,21 +38,52 @@ int pop(char data)
 
 int main()
 {
+    int ch_d = 1, size;
     char n[100];
     scanf("%s", n);
-    for (int i = 0; i < strlen(n); i++)
+    size = strlen(n);
+    printf("size = %d\n", size);
+    for (int i = 0; i < size; i++)
     {
-        if (strlen(n) / 2 > i)
+        if (i < size / 2)
         {
             push(n[i]);
         }
-        else if (strlen(n) / 2 == i && strlen(n) % 2 == 1) // if %2 == 1
-            continue;
-        else
+        else if (!(i == size / 2 && size % 2 == 1))
+        {
             pop(n[i]);
+        }
     }
+
     if (checck == 1)
+    {
+        if (size % 2 != 1)
+            for (int i = 0; i < size / 2; i++)
+            {
+                ch_d = 2;
+                if (i < (size + 1) / 2)
+                {
+                    printf("%d = push -- %c\n", i, n[i]);
+                    push(n[i]);
+                }
+                else if (i != size / 2)
+                {
+                    pop(n[i]);
+                    printf("%d = pop -- %c\n", i, n[i]);
+                }
+            }
+    }
+
+    if (checck == 1 && ch_d == 2)
+    {
+        printf(" double Palindrome ");
+    }
+    else if (checck == 1)
+    {
         printf(" Palindrome ");
+    }
     else
+    {
         printf("no");
+    }
 }
