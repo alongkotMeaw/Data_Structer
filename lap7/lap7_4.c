@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-//                                      in progress   A72Bb27A
 int checck = 1;
 typedef struct node
 {
