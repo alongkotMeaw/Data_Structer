@@ -42,7 +42,7 @@ int main()
     char n[100];
     scanf("%s", n);
     size = strlen(n);
-    printf("size = %d\n", size);
+    //printf("size = %d\n", size);
     for (int i = 0; i < size; i++)
     {
         if (i < size / 2)
@@ -57,33 +57,34 @@ int main()
 
     if (checck == 1)
     {
-        if (size % 2 != 1)
-            for (int i = 0; i < size / 2; i++)
+        //check double
+        ch_d = 2;
+
+
+            for (int i = 0; i < size / 2; i++)// check only size/2 for double
             {
+
+
                 ch_d = 2;
-                if (i < (size + 1) / 2)
+                if (i < (size /4))
                 {
-                    printf("%d = push -- %c\n", i, n[i]);
+                    //printf("%d = push -- %c\n", i, n[i]);
                     push(n[i]);
-                }
-                else if (i != size / 2)
+                }else if(size/4 == i)
+                    continue;
+                else if (i > size /4)
                 {
                     pop(n[i]);
-                    printf("%d = pop -- %c\n", i, n[i]);
+                    //printf("%d = pop -- %c\n", i, n[i]);
                 }
             }
+
     }
 
-    if (checck == 1 && ch_d == 2)
-    {
-        printf(" double Palindrome ");
-    }
-    else if (checck == 1)
-    {
-        printf(" Palindrome ");
-    }
-    else
-    {
-        printf("no");
-    }
+   if (checck == 1 && ch_d == 2)
+      printf(" double Palindrome ");
+   else if (ch_d == 2)
+      printf(" Palindrome ");
+   else
+      printf("no");
 }
