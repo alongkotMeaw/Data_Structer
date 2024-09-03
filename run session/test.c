@@ -1,78 +1,98 @@
-
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-
-#define NUM_THREADS
-
-typedef struct
+// กำหนด interface Withdrawable
+interface Withdrawable
 {
-    int *x;
-    int start;
-    int end;
-    int max_diff;
-} ThreadData;
-
-void *maxdiff2_thread(void *arg)
-{
-    ThreadData *data = (ThreadData *)arg;
-    int i, j, diff, max = 0;
-
-    for (i = data->start; i < data->end - 1; i++)
-    {
-        for (j = i + 1; j < data->end; j++)
-        {
-            diff = abs(data->x[i] - data->x[j]);
-            if (diff > max)
-            {
-                max = diff;
-            }
-        }
-    }
-    data->max_diff = max;
-    pthread_exit(0);
+    boolean withdraw(double amount);
 }
 
-int main()
+// กำหนด abstract class BaseAccount
+abstract class BaseAccount implements Withdrawable
 {
-    int n = 3200;
-    int *x = (int *)malloc(n * sizeof(int));
+    // Abstract method deposit
+public
+    abstract boolean deposit(double amount);
 
-    for (; n < 2500000; n = n * 2)
+    // Implement withdraw method from Withdrawable interface
+    @Override public abstract boolean withdraw(double amount);
+}
+
+// กำหนด abstract class Card
+abstract class Card
+{
+    // Abstract method type
+public
+    abstract String type();
+
+    // Abstract method discount
+public
+    abstract double discount();
+}
+
+// สร้าง subclass ของ BaseAccount คือ SavingAccount
+class SavingAccount extends BaseAccount
+{
+private
+    Card card;
+
+    // Constructor ที่รับ Card เป็นพารามิเตอร์
+public
+    SavingAccount(Card card)
     {
-        x = (int *)realloc(x, n * sizeof(int));
-        clock_t start_t, end_t;
-        double total_t;
-        start_t = clock();
-
-        pthread_t threads[NUM_THREADS];
-        ThreadData thread_data[NUM_THREADS];
-        int segment = n / NUM_THREADS;
-        int max_diff = 0;
-
-        for (int i = 0; i < NUM_THREADS; i++)
-        {
-            thread_data[i].x = x;
-            thread_data[i].start = i * segment;
-            thread_data[i].end = (i == NUM_THREADS - 1) ? n : (i + 1) * segment;
-            pthread_create(&threads[i], NULL, maxdiff2_thread, &thread_data[i]);
-        }
-
-        for (int i = 0; i < NUM_THREADS; i++)
-        {
-            pthread_join(threads[i], NULL);
-            if (thread_data[i].max_diff > max_diff)
-            {
-                max_diff = thread_data[i].max_diff;
-            }
-        }
-
-        end_t = clock();
-        total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
-        printf("n=%d\nMax Difference: %d\nApprox milliseconds: %f\n", n, max_diff, total_t * 1000);
+        this.card = card;
     }
 
-    free(x);
-    return 0;
+    // Implement deposit method
+    @Override public boolean deposit(double amount)
+    {
+        // Logic for deposit
+        System.out.println("Deposited: " + amount);
+        return true; // Example return value
+    }
+
+    // Implement withdraw method
+    @Override public boolean withdraw(double amount)
+    {
+        // Logic for withdraw
+        System.out.println("Withdrew: " + amount);
+        return true; // Example return value
+    }
+
+    // Method to get the Card object
+public
+    Card getCard()
+    {
+        return card;
+    }
+}
+
+// สร้าง subclass ของ Card คือ DebitCard
+class DebitCard extends Card
+{
+    // Implement type method
+    @Override public String type()
+    {
+        return "Debit Card";
+    }
+
+    // Implement discount method
+    @Override public double discount()
+    {
+        return 0.05; // Example discount value
+    }
+}
+
+// ทดสอบการใช้งาน
+public class Main
+{
+public
+    static void main(String[] args)
+    {
+        Card myCard = new DebitCard();
+        SavingAccount myAccount = new SavingAccount(myCard);
+
+        myAccount.deposit(1000);
+        myAccount.withdraw(200);
+
+        System.out.println("Card type: " + myAccount.getCard().type());
+        System.out.println("Card discount: " + myAccount.getCard().discount());
+    }
 }
