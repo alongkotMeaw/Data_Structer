@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <stdbool.h>
 
 char infix[50], var_n[50];
 int index_infix = 0, index_var_n = 0, var_n_int[50];
@@ -29,7 +30,7 @@ void m_infix(char infix_op[])
         if (top != NULL && top->op == '(')
         { // Move 1 for de (
             list *ptr = top;
-            top = top->next;
+            top = ptr->next;
             free(ptr);
         }
     }
@@ -177,7 +178,7 @@ int prefix(char infix[], char var_n[])
         case '^':
             num_2 = pop();
             num_1 = pop();
-            result = pow(num_1, num_2);
+            result = ceil(pow(num_1, num_2));
             push(result);
             break;
 
@@ -200,18 +201,39 @@ int prefix(char infix[], char var_n[])
 int main()
 {
     char input[50];
+
     printf("Enter infix: ");
     scanf("%s", input);
 
     m_infix(input);
     printf("Postfix: %s\n", infix);
-    printf("Variables: %s\n", var_n);
-
+    //printf("Variables: %s\n", var_n);
+    bool  check;
     for (int i = 0; i < strlen(var_n); i++)
     {
-        printf("Enter value of %c: ", var_n[i]);
-        scanf("%d", &var_n_int[i]);
+        check = false;//for check if var
+        //for check if var
+        for(int j = 0; j < i-1;j++){
+            if(var_n[i] == var_n[j]){
+                //printf("\n var %c = %d \n",var_n[i],var_n_int[i]);
+                var_n_int[i] = var_n_int[j];
+                check =true;
+                break;
+            }
+        }
+        if(check) continue;
+
+
+        printf("Enter value of %c: ",var_n[i]);
+        scanf(" %d",&var_n_int[i]);
+
+
     }
+    /******************************/
+    //show befor prefix
+    /*for(int i = 0 ; i < strlen(var_n);i++)
+        printf("%c  =  %d\n",var_n[i],var_n_int[i]);
+*/
 
     printf("Result: %d\n", prefix(infix, var_n));
 
