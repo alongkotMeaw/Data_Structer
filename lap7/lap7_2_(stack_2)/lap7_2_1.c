@@ -21,6 +21,7 @@ void pop()
     }
     if (top != NULL && top->op == '(')
     { // move 1 for de (
+        max_prio = 0;
         list *ptr = top;
         top = top->next;
         free(ptr);

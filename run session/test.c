@@ -1,98 +1,103 @@
-// กำหนด interface Withdrawable
-interface Withdrawable
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct list
 {
-    boolean withdraw(double amount);
-}
+    char op;
+    struct list *next;
+} list;
 
-// กำหนด abstract class BaseAccount
-abstract class BaseAccount implements Withdrawable
+list *top = NULL;
+int max_prio;
+
+void pop()
 {
-    // Abstract method deposit
-public
-    abstract boolean deposit(double amount);
-
-    // Implement withdraw method from Withdrawable interface
-    @Override public abstract boolean withdraw(double amount);
-}
-
-// กำหนด abstract class Card
-abstract class Card
-{
-    // Abstract method type
-public
-    abstract String type();
-
-    // Abstract method discount
-public
-    abstract double discount();
-}
-
-// สร้าง subclass ของ BaseAccount คือ SavingAccount
-class SavingAccount extends BaseAccount
-{
-private
-    Card card;
-
-    // Constructor ที่รับ Card เป็นพารามิเตอร์
-public
-    SavingAccount(Card card)
+    while (top != NULL && top->op != '(') // stop if null or found (
     {
-        this.card = card;
+        list *ptr = top;
+        printf("%c", ptr->op);
+        top = top->next;
+        free(ptr);
     }
-
-    // Implement deposit method
-    @Override public boolean deposit(double amount)
-    {
-        // Logic for deposit
-        System.out.println("Deposited: " + amount);
-        return true; // Example return value
-    }
-
-    // Implement withdraw method
-    @Override public boolean withdraw(double amount)
-    {
-        // Logic for withdraw
-        System.out.println("Withdrew: " + amount);
-        return true; // Example return value
-    }
-
-    // Method to get the Card object
-public
-    Card getCard()
-    {
-        return card;
+    if (top != NULL && top->op == '(')
+    { // move 1 for de (
+        max_prio = 0;
+        list *ptr = top;
+        top = top->next;
+        free(ptr);
     }
 }
 
-// สร้าง subclass ของ Card คือ DebitCard
-class DebitCard extends Card
+void push(char op, int prio)
 {
-    // Implement type method
-    @Override public String type()
-    {
-        return "Debit Card";
-    }
+    list *new_list = (list *)malloc(sizeof(list));
+    new_list->op = op;
 
-    // Implement discount method
-    @Override public double discount()
+    if (top == NULL)
     {
-        return 0.05; // Example discount value
+        max_prio = prio;
+        new_list->next = NULL;
+        top = new_list;
+    }
+    else if (op == '(')
+    {
+        max_prio = 0;
+        new_list->next = top;
+        top = new_list;
+    }
+    else if (max_prio < prio)
+    {
+        max_prio = prio;
+        new_list->next = top;
+        top = new_list;
+    }
+    else
+    {
+        pop();
+        new_list->next = top;
+        top = new_list;
+        max_prio = prio;
     }
 }
 
-// ทดสอบการใช้งาน
-public class Main
+int main()
 {
-public
-    static void main(String[] args)
+    char n;
+    // +- 1 : */ 2 / () 0
+    while ((n = getchar()) != '\n')
     {
-        Card myCard = new DebitCard();
-        SavingAccount myAccount = new SavingAccount(myCard);
+        switch (n)
+        {
+        case '+':
+            push('+', 1);
+            break;
 
-        myAccount.deposit(1000);
-        myAccount.withdraw(200);
+        case '-':
+            push('-', 1);
+            break;
 
-        System.out.println("Card type: " + myAccount.getCard().type());
-        System.out.println("Card discount: " + myAccount.getCard().discount());
+        case '*':
+            push('*', 2);
+            break;
+        case '/':
+            push('/', 2);
+            break;
+        case '^':
+            push('^', 3);
+            break;
+        case '(':
+            push('(', 0);
+            break;
+        case ')':
+            pop();
+            break;
+        default:
+            printf("\n adaw\n");
+            printf("%c", n);
+            break;
+        }
     }
+    pop();
+
+    return 0;
 }

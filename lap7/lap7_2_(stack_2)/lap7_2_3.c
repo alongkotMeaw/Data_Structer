@@ -12,6 +12,7 @@ void m_infix(char infix_op[])
     typedef struct list
     {
         char op;
+        int prio;
         struct list *next;
     } list;
 
@@ -29,6 +30,8 @@ void m_infix(char infix_op[])
         }
         if (top != NULL && top->op == '(')
         { // Move 1 for de (
+            max_prio = top->next->prio;
+            ;
             list *ptr = top;
             top = ptr->next;
             free(ptr);
@@ -38,6 +41,7 @@ void m_infix(char infix_op[])
     void push(char op, int prio)
     {
         list *new_list = (list *)malloc(sizeof(list));
+        new_list->prio = prio;
         new_list->op = op;
 
         if (top == NULL)
@@ -48,7 +52,8 @@ void m_infix(char infix_op[])
         }
         else if (op == '(')
         {
-            max_prio = 0;
+            new_list->prio = prio;
+            max_prio = prio;
             new_list->next = top;
             top = new_list;
         }
@@ -207,30 +212,30 @@ int main()
 
     m_infix(input);
     printf("Postfix: %s\n", infix);
-    //printf("Variables: %s\n", var_n);
-    bool  check;
+    // printf("Variables: %s\n", var_n);
+    bool check;
     for (int i = 0; i < strlen(var_n); i++)
     {
-        check = false;//for check if var
-        //for check if var
-        for(int j = 0; j < i-1;j++){
-            if(var_n[i] == var_n[j]){
-                //printf("\n var %c = %d \n",var_n[i],var_n_int[i]);
+        check = false; // for check if var
+        // for check if var
+        for (int j = 0; j < i - 1; j++)
+        {
+            if (var_n[i] == var_n[j])
+            {
+                // printf("\n var %c = %d \n",var_n[i],var_n_int[i]);
                 var_n_int[i] = var_n_int[j];
-                check =true;
+                check = true;
                 break;
             }
         }
-        if(check) continue;
+        if (check)
+            continue;
 
-
-        printf("Enter value of %c: ",var_n[i]);
-        scanf(" %d",&var_n_int[i]);
-
-
+        printf("Enter value of %c: ", var_n[i]);
+        scanf(" %d", &var_n_int[i]);
     }
     /******************************/
-    //show befor prefix
+    // show befor prefix
     /*for(int i = 0 ; i < strlen(var_n);i++)
         printf("%c  =  %d\n",var_n[i],var_n_int[i]);
 */
