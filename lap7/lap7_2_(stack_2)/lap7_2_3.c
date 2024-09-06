@@ -230,7 +230,7 @@ int main()
 
     m_infix(input);
     printf("Postfix: %s\n", infix);
-    // printf("Variables: %s\n", var_n);
+
     bool check;
     for (int i = 0; i < strlen(var_n); i++)
     {
@@ -240,7 +240,6 @@ int main()
         {
             if (var_n[i] == var_n[j])
             {
-                // printf("\n var %c = %d \n",var_n[i],var_n_int[i]);
                 var_n_int[i] = var_n_int[j];
                 check = true;
                 break;
@@ -252,12 +251,6 @@ int main()
         printf("Enter value of %c: ", var_n[i]);
         scanf(" %d", &var_n_int[i]);
     }
-    /******************************/
-    // show befor prefix
-    /*for(int i = 0 ; i < strlen(var_n);i++)
-        printf("%c  =  %d\n",var_n[i],var_n_int[i]);
-*/
-
     printf("Result: %d\n", prefix(infix, var_n));
 
     return 0;

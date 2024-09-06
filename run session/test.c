@@ -1,3 +1,43 @@
+/////////////////////////////////////////////main session////////////////////////////////////////////////////
+// to use rename main to test_main(char str[])
+#include <stdio.h>
+#include <time.h>
+const int round_test = 240000000;
+int test_main(char str[]);
+int main(int argc, char const *argv[])
+{
+    int n = 200; // Starting with a smaller value
+    char *x = (char *)malloc(n * sizeof(char));
+    if (x == NULL)
+    {
+        perror("Failed to allocate memory");
+    }
+
+    for (; n <= round_test; n = n * 2)
+    {
+        x = (char *)realloc(x, n * sizeof(char));
+        if (x == NULL)
+        {
+            perror("Failed to reallocate memory");
+        }
+
+        clock_t start_t, end_t;
+        double total_t;
+        start_t = clock();
+        for (int l = 0; l < 3; l++) // test 3 round
+            test_main(x);           // Call your function here
+
+        end_t = clock();
+        total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+
+        printf("n=%d\nApprox milliseconds: %f\n", n, total_t * 1000);
+    }
+
+    free(x);
+    return 0;
+}
+
+//////////////////////////////////////////progam to test ////////////////////////////////////////////////
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -73,12 +113,13 @@ void push(char op, int prio)
     }
 }
 
-int main()
+int test_main(char str[])
 {
     char n;
     // +- 1 : */ 2 / () 0
-    while ((n = getchar()) != '\n')
+    for (int i = 0; i < strlen(str); i++)
     {
+        n = str[i];
         switch (n)
         {
         case '+':
@@ -110,6 +151,4 @@ int main()
         }
     }
     pop();
-
-    return 0;
 }
