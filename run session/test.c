@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct list
 {
@@ -21,9 +22,21 @@ void pop()
     }
     if (top != NULL && top->op == '(')
     { // move 1 for de (
-        max_prio = 0;
+        char op_list[] = "+-*/^";
         list *ptr = top;
         top = top->next;
+        for (int i = 0; i < strlen(op_list); i++)
+        {
+            if (top->op == op_list[i])
+            {
+                if (i < 2)
+                    max_prio = 1;
+                else if (i < 4)
+                    max_prio = 2;
+                else
+                    max_prio = 3;
+            }
+        }
         free(ptr);
     }
 }
@@ -92,7 +105,6 @@ int main()
             pop();
             break;
         default:
-            printf("\n adaw\n");
             printf("%c", n);
             break;
         }

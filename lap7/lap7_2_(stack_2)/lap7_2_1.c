@@ -73,7 +73,8 @@ int main()
             break;
 
         case '-':
-            push('-', 1) break;
+            push('-', 1);
+            break;
 
         case '*':
             push('*', 2);

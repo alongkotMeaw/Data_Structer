@@ -29,12 +29,30 @@ void m_infix(char infix_op[])
             free(ptr);
         }
         if (top != NULL && top->op == '(')
-        { // Move 1 for de (
-            max_prio = top->next->prio;
-            ;
+        { // Move 1 for de ('
+            char op_list[] = "+-*/^";
             list *ptr = top;
-            top = ptr->next;
-            free(ptr);
+            if (top->next == NULL)
+            {
+                max_prio = 0;
+            }
+            else
+            {
+                top = top->next;
+                for (int i = 0; i < strlen(op_list); i++)
+                {
+                    if (top->op == op_list[i])
+                    {
+                        if (i < 2)
+                            max_prio = 1;
+                        else if (i < 4)
+                            max_prio = 2;
+                        else
+                            max_prio = 3;
+                    }
+                }
+                free(ptr);
+            }
         }
     }
 
