@@ -2,11 +2,22 @@
 // to use rename main to test_main(char str[])
 #include <stdio.h>
 #include <time.h>
+#include <pthread.h>
+#include <string.h>
+#define NUM_THREADS 16             // num of theard
+char test_input[] = "4+6*(5+6)-8"; // your test in put
 const int round_test = 240000000;
+int n = 200; // Starting with a smaller value
 int test_main(char str[]);
+void *fill_array(void *arg);
+typedef struct
+{
+    int thread_id;
+    char *x;
+} thread_data;
+
 int main(int argc, char const *argv[])
 {
-    int n = 200; // Starting with a smaller value
     char *x = (char *)malloc(n * sizeof(char));
     if (x == NULL)
     {
@@ -20,21 +31,57 @@ int main(int argc, char const *argv[])
         {
             perror("Failed to reallocate memory");
         }
+        // asian array x
+        // create threads
+        thread_data t_data[NUM_THREADS];
+        pthread_t threads[NUM_THREADS];
+        for (int i = 0; i < NUM_THREADS; i++)
+        {
+            t_data[i].thread_id = i;
+            t_data[i].x = x;
+            pthread_create(&threads[i], NULL, fill_array, (void *)&t_data[i]);
+        }
 
+        // check all thred end
+        for (int i = 0; i < NUM_THREADS; i++)
+        {
+            pthread_join(threads[i], NULL);
+        }
+        //////////////////////////////////////////////////////
         clock_t start_t, end_t;
         double total_t;
+        unsigned long int total_c;
         start_t = clock();
         for (int l = 0; l < 3; l++) // test 3 round
             test_main(x);           // Call your function here
 
         end_t = clock();
         total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+        total_c = (unsigned long int)total_t;
 
-        printf("n=%d\nApprox milliseconds: %f\n", n, total_t * 1000);
+        printf("n =%d\nApprox milliseconds:%lu  %f\n", n, total_c / 3, total_t / 3.0);
     }
 
     free(x);
     return 0;
+}
+
+/// ptheard
+void *fill_array(void *arg)
+{
+    thread_data *data = (thread_data *)arg;
+    int start = (n / NUM_THREADS) * data->thread_id;
+    int end = (data->thread_id == NUM_THREADS - 1) ? n : start + (n / NUM_THREADS);
+
+    for (int i = start; i < end; i += strlen(test_input))
+    {
+        if (i + strlen(test_input) <= n)
+        {
+            strncpy(&data->x[i], test_input, strlen(test_input));
+        }
+    }
+
+    return NULL;
 }
 
 //////////////////////////////////////////progam to test ////////////////////////////////////////////////
@@ -56,7 +103,7 @@ void pop()
     while (top != NULL && top->op != '(') // stop if null or found (
     {
         list *ptr = top;
-        printf("%c", ptr->op);
+        // printf("%c", ptr->op);
         top = top->next;
         free(ptr);
     }
@@ -146,7 +193,7 @@ int test_main(char str[])
             pop();
             break;
         default:
-            printf("%c", n);
+            // printf("%c", n);
             break;
         }
     }
