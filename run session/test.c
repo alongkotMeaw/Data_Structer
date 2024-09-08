@@ -6,7 +6,7 @@
 #include <string.h>
 #define NUM_THREADS 16             // num of theard
 char test_input[] = "4+6*(5+6)-8"; // your test in put
-const int round_test = 240000000;
+const int round_test = 2147483647;
 int n = 200; // Starting with a smaller value
 int test_main(char str[]);
 void *fill_array(void *arg);
