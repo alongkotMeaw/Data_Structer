@@ -97,7 +97,6 @@ void SetRight(Treenode *mother, char data)
         printf("node in use\n");
 }
 
-// in progress
 void preorder(Treenode *node_print)
 {
     if (node_print != NULL)
