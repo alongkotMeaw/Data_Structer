@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 typedef struct Treenode
 {
     char data;
@@ -11,6 +12,8 @@ typedef struct Treenode
 } Treenode;
 Treenode *Top = NULL;
 Treenode *Root = NULL;
+int index_return_preinoder = 0;
+char array_return_preinorder[51];
 
 // function list
 // stack
@@ -19,13 +22,17 @@ Treenode *pop();
 // tree
 Treenode *createNode(char new_data);
 Treenode *pushtree(Treenode *node_lef, Treenode *node_right, Treenode *mother);
-void preinorder();
+void preinorder(Treenode *, char str[]);
+// cal function
+int Postfix();
+int calculate();
+
 void main(int argc, char const *argv[])
 {
     char op[51];
     Treenode *node_left, *node_right;
     scanf("%s", op);
-    printf("input length = %d\n", strlen(op));
+    /// printf("input length = %d\n", strlen(op));
     for (int i = strlen(op) - 1; i >= 0; i--) // read at end to first // -1 for index start 0
     {
         if ('0' <= op[i] && op[i] <= '9')
@@ -47,13 +54,20 @@ void main(int argc, char const *argv[])
     }
 
     // call preorder and postorder
-    printf("Prefix: ");
-    preinorder(Top);
-    printf("\n");
+    preinorder(Top, "infix"); /// travel on tree for asin value to array
+    printf("array to show %s\n", array_return_preinorder);
+    strcpy(array_return_preinorder, ""); // reset array
+    index_return_preinoder = 0;          /// set index back to reset array
+    preinorder(Top, "posfix");
+    // printf("array send to posgix %s\n", array_return_preinorder);
+    printf("out put = %d", calculate());
+    //   printf("Prefix: ");
+    //   preinorder(Top);
+    //   printf("\n");
 }
 
 // stack
-void push(Treenode *node_add) /// use left child is next
+void push(Treenode *node_add) ///
 {
     if (Top == NULL)
         Top = node_add;
@@ -92,14 +106,116 @@ Treenode *createNode(char new_data)
     new_node->rightChild = NULL;
     return new_node;
 }
-void preinorder(Treenode *node_print)
+void preinorder(Treenode *node_print, char str[]) // Postfix
 {
     if (node_print != NULL)
     {
-        preinorder(node_print->leftChild);
-        printf("%c ", node_print->data);
-        preinorder(node_print->rightChild);
+        if (!strcasecmp(str, "infix"))
+        {
+            preinorder(node_print->leftChild, str);
+            array_return_preinorder[index_return_preinoder++] = node_print->data;
+            preinorder(node_print->rightChild, str);
+        }
+        else if (strcmp(str, "Postfix"))
+        {
+            preinorder(node_print->leftChild, str);
+            preinorder(node_print->rightChild, str);
+            array_return_preinorder[index_return_preinoder++] = node_print->data;
+        }
     }
 }
 
 ///////////////////// od code at to use ///////////////////// ///
+
+int calculate()
+{
+
+    typedef struct list
+    {
+        int num;
+        struct list *next;
+    } list;
+
+    list *top = NULL;
+
+    void push_in_cal(int n)
+    {
+        // printf("n input == %d\n", n);
+        list *new_list = (list *)malloc(sizeof(list));
+        new_list->num = n;
+        new_list->next = top;
+        top = new_list;
+    }
+
+    int pop_in_cal()
+    {
+        if (top == NULL)
+        {
+            printf("Stack is empty\n");
+            return 0;
+        }
+        int re_n = top->num;
+        list *temp = top;
+        top = top->next;
+        free(temp);
+        return re_n;
+    }
+
+    // main
+
+    char n;
+    int result = 0, num_1, num_2;
+
+    // +- 1 : */ 2 / () 0
+    for (int i = 0; i < strlen(array_return_preinorder); i++)
+    {
+        switch (array_return_preinorder[i])
+        {
+        case '+':
+            num_2 = pop_in_cal();
+            num_1 = pop_in_cal();
+            result = num_1 + num_2;
+            push_in_cal(result);
+            break;
+
+        case '-':
+            num_2 = pop_in_cal();
+            num_1 = pop_in_cal();
+            result = num_1 - num_2;
+            push_in_cal(result);
+            break;
+
+        case '*':
+            num_2 = pop_in_cal();
+            num_1 = pop_in_cal();
+            result = num_1 * num_2;
+            push_in_cal(result);
+            break;
+
+        case '/':
+            num_2 = pop_in_cal();
+            num_1 = pop_in_cal();
+            result = num_1 / num_2;
+            push_in_cal(result);
+            break;
+
+        case '^':
+            num_2 = pop_in_cal();
+            num_1 = pop_in_cal();
+            result = pow(num_1, num_2);
+            push_in_cal(result);
+            break;
+
+        default:
+            if (array_return_preinorder[i] >= '0' && array_return_preinorder[i] <= '9')
+            {
+                push_in_cal((array_return_preinorder[i] - '0'));
+            }
+            break;
+        }
+    }
+
+    // printf("\n%d\n", result);
+
+    return result;
+}
