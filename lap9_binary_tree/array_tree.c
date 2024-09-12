@@ -34,7 +34,7 @@ bool isRight(int k)
     return false;
 }
 
-void SetLeft(k, data)
+void SetLeft(int k, int data)
 {
     int index = 2 * k + 1;
     if (index < MAXTREE)
@@ -50,7 +50,7 @@ void SetLeft(k, data)
         printf("Tree Overflow\n");
 }
 
-void SetRight(k, data)
+void SetRight(int k, int data)
 {
     int index = 2 * k + 2;
     if (index < MAXTREE)

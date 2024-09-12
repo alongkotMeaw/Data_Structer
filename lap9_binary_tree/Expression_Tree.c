@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <stdbool.h>
 typedef struct Treenode
 {
     char data;
     struct Treenode *leftChild;
     struct Treenode *rightChild;
     struct Treenode *next;
+    struct Treenode *mother;
 
 } Treenode;
 Treenode *Top = NULL;
@@ -55,15 +57,8 @@ void main(int argc, char const *argv[])
 
     // call preorder and postorder
     preinorder(Top, "infix"); /// travel on tree for asin value to array
-    printf("array to show %s\n", array_return_preinorder);
-    strcpy(array_return_preinorder, ""); // reset array
-    index_return_preinoder = 0;          /// set index back to reset array
     preinorder(Top, "posfix");
-    // printf("array send to posgix %s\n", array_return_preinorder);
-    printf("out put = %d", calculate());
-    //   printf("Prefix: ");
-    //   preinorder(Top);
-    //   printf("\n");
+    printf("= %d", calculate());
 }
 
 // stack
@@ -93,6 +88,8 @@ Treenode *pop()
 Treenode *pushtree(Treenode *node_lef, Treenode *node_right, Treenode *mother)
 {
     mother->leftChild = node_lef;
+    node_lef->mother = mother; // set mother
+    node_right->mother = mother;
     mother->rightChild = node_right;
     return mother;
 }
@@ -106,15 +103,32 @@ Treenode *createNode(char new_data)
     new_node->rightChild = NULL;
     return new_node;
 }
+
 void preinorder(Treenode *node_print, char str[]) // Postfix
 {
     if (node_print != NULL)
     {
         if (!strcasecmp(str, "infix"))
         {
-            preinorder(node_print->leftChild, str);
-            array_return_preinorder[index_return_preinoder++] = node_print->data;
-            preinorder(node_print->rightChild, str);
+            bool check_operrand = false;
+            char operand[] = "+-*/^";
+            for (int i = 0; i < strlen(operand); i++) // loop for check num
+                if (node_print->data == operand[i])
+                {
+                    check_operrand = true;
+                    break;
+                }
+
+            if (check_operrand)
+            {
+                printf("(");
+                preinorder(node_print->leftChild, str);
+                printf("%c", node_print->data);
+                preinorder(node_print->rightChild, str);
+                printf(")");
+            }
+            else
+                printf("%c", node_print->data);
         }
         else if (strcmp(str, "Postfix"))
         {
