@@ -14,8 +14,6 @@ typedef struct Treenode
 } Treenode;
 Treenode *Top = NULL;
 Treenode *Root = NULL;
-int index_return_preinoder = 0;
-char array_return_preinorder[51];
 
 // function list
 // stack
@@ -24,10 +22,11 @@ Treenode *pop();
 // tree
 Treenode *createNode(char new_data);
 Treenode *pushtree(Treenode *node_lef, Treenode *node_right, Treenode *mother);
-void preinorder(Treenode *, char str[]);
+void preinorder(Treenode *);
 // cal function
 int Postfix();
-int calculate();
+int calculate(int x, int y, char opt);
+int sumnode(Treenode *);
 
 void main(int argc, char const *argv[])
 {
@@ -56,9 +55,8 @@ void main(int argc, char const *argv[])
     }
 
     // call preorder and postorder
-    preinorder(Top, "infix"); /// travel on tree for asin value to array
-    preinorder(Top, "posfix");
-    printf("= %d", calculate());
+    preinorder(Top); /// travel on tree for asin value to array
+    printf("= %d", sumnode(Top));
 }
 
 // stack
@@ -104,132 +102,75 @@ Treenode *createNode(char new_data)
     return new_node;
 }
 
-void preinorder(Treenode *node_print, char str[]) // Postfix
+void preinorder(Treenode *node_print) // Postfix
 {
     if (node_print != NULL)
     {
-        if (!strcasecmp(str, "infix"))
-        {
-            bool check_operrand = false;
-            char operand[] = "+-*/^";
-            for (int i = 0; i < strlen(operand); i++) // loop for check num
-                if (node_print->data == operand[i])
-                {
-                    check_operrand = true;
-                    break;
-                }
-
-            if (check_operrand)
+        bool check_operrand = false;
+        char operand[] = "+-*/^";
+        for (int i = 0; i < strlen(operand); i++) // loop for check num
+            if (node_print->data == operand[i])
             {
-                printf("(");
-                preinorder(node_print->leftChild, str);
-                printf("%c", node_print->data);
-                preinorder(node_print->rightChild, str);
-                printf(")");
+                check_operrand = true;
+                break;
             }
-            else
-                printf("%c", node_print->data);
-        }
-        else if (strcmp(str, "Postfix"))
+
+        if (check_operrand)
         {
-            preinorder(node_print->leftChild, str);
-            preinorder(node_print->rightChild, str);
-            array_return_preinorder[index_return_preinoder++] = node_print->data;
+            printf("(");
+            preinorder(node_print->leftChild);
+            printf("%c", node_print->data);
+            preinorder(node_print->rightChild);
+            printf(")");
         }
+        else
+            printf("%c", node_print->data);
     }
 }
 
-///////////////////// od code at to use ///////////////////// ///
+bool isleft(Treenode *node_check)
+{
+    if (node_check->mother->leftChild == node_check)
+        return true;
+    else
+        return false;
+}
 
-int calculate()
+int sumnode(Treenode *node_sum)
+{
+    if (node_sum == NULL)
+        return 0;
+    if (isleft(node_sum))
+        return node_sum->data;
+
+    int x = sumnode(node_sum->leftChild);
+    int y = sumnode(node_sum->rightChild);
+    char opt = node_sum->data;
+    return calculate(x, y, opt);
+}
+
+int calculate(int x, int y, char opt)
 {
 
-    typedef struct list
+    int result = 0;
+    switch (opt)
     {
-        int num;
-        struct list *next;
-    } list;
-
-    list *top = NULL;
-
-    void push_in_cal(int n)
-    {
-        // printf("n input == %d\n", n);
-        list *new_list = (list *)malloc(sizeof(list));
-        new_list->num = n;
-        new_list->next = top;
-        top = new_list;
+    case '+':
+        result = result + x + y;
+        break;
+    case '-':
+        result = result + x - y;
+        break;
+    case '*':
+        result = result + x * y;
+        break;
+    case '/':
+        result = result + x / y;
+        break;
+    case '^':
+        result = result + ceil(pow(x, y));
+        break;
     }
-
-    int pop_in_cal()
-    {
-        if (top == NULL)
-        {
-            printf("Stack is empty\n");
-            return 0;
-        }
-        int re_n = top->num;
-        list *temp = top;
-        top = top->next;
-        free(temp);
-        return re_n;
-    }
-
-    // main
-
-    char n;
-    int result = 0, num_1, num_2;
-
-    // +- 1 : */ 2 / () 0
-    for (int i = 0; i < strlen(array_return_preinorder); i++)
-    {
-        switch (array_return_preinorder[i])
-        {
-        case '+':
-            num_2 = pop_in_cal();
-            num_1 = pop_in_cal();
-            result = num_1 + num_2;
-            push_in_cal(result);
-            break;
-
-        case '-':
-            num_2 = pop_in_cal();
-            num_1 = pop_in_cal();
-            result = num_1 - num_2;
-            push_in_cal(result);
-            break;
-
-        case '*':
-            num_2 = pop_in_cal();
-            num_1 = pop_in_cal();
-            result = num_1 * num_2;
-            push_in_cal(result);
-            break;
-
-        case '/':
-            num_2 = pop_in_cal();
-            num_1 = pop_in_cal();
-            result = num_1 / num_2;
-            push_in_cal(result);
-            break;
-
-        case '^':
-            num_2 = pop_in_cal();
-            num_1 = pop_in_cal();
-            result = pow(num_1, num_2);
-            push_in_cal(result);
-            break;
-
-        default:
-            if (array_return_preinorder[i] >= '0' && array_return_preinorder[i] <= '9')
-            {
-                push_in_cal((array_return_preinorder[i] - '0'));
-            }
-            break;
-        }
-    }
-
-    // printf("\n%d\n", result);
 
     return result;
 }
