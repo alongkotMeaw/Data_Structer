@@ -80,13 +80,16 @@ Treenode *createNode(char new_data)
     return new_node;
 }
 
-void preinorder(Treenode *node_print) // Postfix
+void postfix(Treenode *node_print)
 {
     if (node_print != NULL)
     {
+        postfix(node_print->leftChild);
+        postfix(node_print->rightChild);
+
         bool check_operrand = false;
         char operand[] = "+-*/^";
-        for (int i = 0; i < strlen(operand); i++) // loop for check num
+        for (int i = 0; i < strlen(operand); i++)
             if (node_print->data == operand[i])
             {
                 check_operrand = true;
@@ -96,9 +99,7 @@ void preinorder(Treenode *node_print) // Postfix
         if (check_operrand)
         {
             printf("(");
-            preinorder(node_print->leftChild);
             printf("%c", node_print->data);
-            preinorder(node_print->rightChild);
             printf(")");
         }
         else
