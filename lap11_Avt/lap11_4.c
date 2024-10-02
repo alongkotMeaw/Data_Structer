@@ -43,7 +43,7 @@ Treenode *rightRotate(Treenode *y)
     x->mother = y->mother;
     y->mother = x;
 
-    printf("Right Rotate at Node: %d\n", y->data);
+    // printf("Right Rotate at Node: %d\n", y->data);
 
     return x; // New root after rotation
 }
@@ -64,7 +64,7 @@ Treenode *leftRotate(Treenode *x)
     y->mother = x->mother;
     x->mother = y;
 
-    printf("Left Rotate at Node: %d\n", x->data);
+    // printf("Left Rotate at Node: %d\n", x->data);
 
     return y; // New root after rotation
 }
@@ -166,9 +166,32 @@ void find(Treenode *ptr, char find_c)
     }
 }
 
+int find_hight()
+{
+    int level = 0;
+    Treenode *current = Root;
+    while (current != NULL)
+    {
+        if (find_ptr->data == current->data)
+        {
+            return level;
+        }
+        else if (find_ptr->data < current->data)
+        {
+            current = current->leftChild;
+        }
+        else
+        {
+            current = current->rightChild;
+        }
+        level++;
+    }
+    return -1; // Return -1 if not found
+}
+// ABCDEFGHIJKLMNOPQRSTUVWXYZ
 int main()
 {
-    char input[101];
+    char input[101]; // = "CONGRATULI1A31I";
     scanf("%s", input);
     for (int round = 0; round < strlen(input); round++)
     {
@@ -186,8 +209,7 @@ int main()
             find(Root, c_find);
             if (find_status)
             {
-                printf("%d", (Height(find_ptr) - 1));
-
+                printf("%d", find_hight());
                 find_status = false; // revalue for new round
             }
             else
