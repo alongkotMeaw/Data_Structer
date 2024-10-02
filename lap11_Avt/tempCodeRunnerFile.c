@@ -1,0 +1,2 @@
+
+        find(ptr->rightChild, find);
