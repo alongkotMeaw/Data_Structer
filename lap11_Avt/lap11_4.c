@@ -29,44 +29,44 @@ Treenode *createNode(int data)
 Treenode *rightRotate(Treenode *y)
 {
     Treenode *x = y->leftChild;
-    Treenode *T2 = x->rightChild;
+    Treenode *z = x->rightChild;
 
     // Perform rotation
     x->rightChild = y;
-    y->leftChild = T2;
+    y->leftChild = z;
 
     // Update mother pointers
-    if (T2 != NULL)
+    if (z != NULL)
     {
-        T2->mother = y;
+        z->mother = y;
     }
     x->mother = y->mother;
     y->mother = x;
 
     // printf("Right Rotate at Node: %d\n", y->data);
 
-    return x; // New root after rotation
+    return x;
 }
 
 Treenode *leftRotate(Treenode *x)
 {
     Treenode *y = x->rightChild;
-    Treenode *T2 = y->leftChild;
+    Treenode *z = y->leftChild;
 
     y->leftChild = x;
-    x->rightChild = T2;
+    x->rightChild = z;
 
     // Update mother pointers
-    if (T2 != NULL)
+    if (z != NULL)
     {
-        T2->mother = x;
+        z->mother = x;
     }
     y->mother = x->mother;
     x->mother = y;
 
     // printf("Left Rotate at Node: %d\n", x->data);
 
-    return y; // New root after rotation
+    return y;
 }
 
 int max(int x, int y)
