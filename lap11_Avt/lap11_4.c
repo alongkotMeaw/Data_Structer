@@ -31,11 +31,11 @@ Treenode *rightRotate(Treenode *y)
     Treenode *x = y->leftChild;
     Treenode *z = x->rightChild;
 
-    // Perform rotation
+
     x->rightChild = y;
     y->leftChild = z;
 
-    // Update mother pointers
+
     if (z != NULL)
     {
         z->mother = y;
@@ -56,7 +56,7 @@ Treenode *leftRotate(Treenode *x)
     y->leftChild = x;
     x->rightChild = z;
 
-    // Update mother pointers
+
     if (z != NULL)
     {
         z->mother = x;
