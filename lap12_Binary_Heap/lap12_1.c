@@ -8,7 +8,7 @@ void swap(int *x, int *y)
     *y = temp;
 }
 
-void insertHeap(int new_heap, int round, int *heap_array)
+void insertHeap(int new_heap, int round)
 {
 
     heap_array[round] = new_heap;
@@ -50,7 +50,7 @@ int main()
     for (int round = 0; round < heap_size; round++)
     {
         scanf("%d", &input);
-        insertHeap(input, round, heap_array);
+        insertHeap(input, round;
     }
 
     show(heap_array, heap_size);

@@ -1,35 +1,70 @@
 #include <stdio.h>
-#include <math.h>
-int heap_array[100];
 
-void show(int *heap_array, int heap_size)
+int heap_input[100];
+
+void swap(int *x, int *y)
 {
-    int new_line = 3;
-    for (int i = 1; i <= heap_size; i++)
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void heapify(int heap_input[], int heap_size, int i)
+{
+    int smallest = i;
+    int left_child = 2 * i + 1;
+    int right_child = 2 * i + 2;
+
+    if (left_child < heap_size && heap_input[left_child] < heap_input[smallest])
+        smallest = left_child;
+
+    if (right_child < heap_size && heap_input[right_child] < heap_input[smallest])
+        smallest = right_child;
+
+    // ถ้า smallest
+    if (smallest != i)
     {
-        printf("%d ", heap_array[i - 1]);
-        if (i == 1 || i % 3 == 0)
-        {
-            new_line = new_line * 2 + 1;
-            printf("\n");
-        }
+        swap(&heap_input[i], &heap_input[smallest]);
+        heapify(heap_input, heap_size, smallest);
     }
 }
 
-int is_heap(int heap_array[], int round)
+void buildHeap(int heap_input[], int heap_size)
 {
 
-    for (int i = 0; i <= (round - 2) / 2; i++)
+    for (int i = (heap_size / 2) - 1; i >= 0; i--)
+    {
+        heapify(heap_input, heap_size, i);
+    }
+}
+
+void show(int *heap_input, int heap_size)
+{
+    int new_line = 1;
+    for (int i = 0; i < heap_size; i++)
+    {
+        printf("%d ", heap_input[i]);
+        if (i + 1 == new_line)
+        {
+            printf("\n");
+            new_line = new_line * 2 + 1;
+        }
+    }
+    printf("\n");
+}
+
+int is_heap(int heap_input[], int heap_size)
+{
+    for (int i = 0; i <= (heap_size - 2) / 2; i++)
     {
         int left_child_index = 2 * i + 1;
-        // Right child index
         int right_child_index = 2 * i + 2;
 
-        if (left_child_index < round && arr[i] > arr[left_child_index])
+        if (left_child_index < heap_size && heap_input[i] > heap_input[left_child_index])
         {
             return 0;
         }
-        if (right_child_index < round && arr[i] > arr[right_child_index])
+        if (right_child_index < heap_size && heap_input[i] > heap_input[right_child_index])
         {
             return 0;
         }
@@ -39,16 +74,24 @@ int is_heap(int heap_array[], int round)
 
 int main()
 {
-    int heap_size, input;
+    int heap_size;
     scanf("%d", &heap_size);
-    if (is_heap(heap_array))
-        for (int round = 0; round < heap_size; round++)
-        {
-            scanf("%d", &input);
-            insertHeap(input, round, heap_array);
-        }
-    printf("saddddddddddd\n");
-    show(heap_array, heap_size);
+
+    for (int i = 0; i < heap_size; i++)
+    {
+        scanf("%d", &heap_input[i]);
+    }
+
+    if (is_heap(heap_input, heap_size))
+    {
+        printf("a Min-Heap\n");
+    }
+    else
+    {
+        printf("Not a Min-Heap\n");
+        buildHeap(heap_input, heap_size);
+        show(heap_input, heap_size);
+    }
 
     return 0;
 }
