@@ -1,50 +1,57 @@
 #include <stdio.h>
-#include <stdbool.h>
+#include <limits.h>
 
-bool is_tree(int left, int right)
+int is_bst(int arr[], int idx, int n, int mini, int maxi)
 {
-    if (left <= right)
-        true;
+    if (idx >= n || arr[idx] == 0)
+        return 1;
+    if (arr[idx] <= mini || arr[idx] >= maxi)
+        return 0;
+
+    return is_bst(arr, 2 * idx + 1, n, mini, arr[idx]) && is_bst(arr, 2 * idx + 2, n, arr[idx], maxi);
+}
+
+int sum_in_range(int arr[], int idx, int n, int low, int high)
+{
+    if (idx >= n || arr[idx] == 0)
+        return 0;
+
+    int total = 0;
+
+    if (low <= arr[idx] && arr[idx] <= high)
+        total += arr[idx];
+
+    total += sum_in_range(arr, 2 * idx + 1, n, low, high);
+    total += sum_in_range(arr, 2 * idx + 2, n, low, high);
+
+    return total;
+}
+
+int main()
+{
+    int n, low, high;
+
+    scanf("%d", &n);
+
+    int arr[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
+
+    scanf("%d %d", &low, &high);
+
+    if (is_bst(arr, 0, n, INT_MIN, INT_MAX))
+    {
+
+        int total_sum = sum_in_range(arr, 0, n, low, high);
+        printf("1 %d\n", total_sum);
+    }
     else
-        false;
-}
-
-void main()
-{
-    int size;
-    scanf("%d", &size);
-
-    int input[size], input_index = 0, max, min;
-    for (; input_index < size; input_index++)
     {
-        scanf(" %d", input[input_index]);
+        printf("0\n");
     }
-    scanf(" %d %d", &min, &max);
-    bool check = true;
-    for (int travel = 0; travel < size; travel += 3)
-    {
-        if (input[travel] < input[travel + 2] && is_tree(input[travel + 1], input[travel + 2]))
-        {
-            check = false;
-            break;
-        }
-    }
-    printf("check == %d", check);
+
+    return 0;
 }
-
-/*
-7
-17
-0
-19
-0
-0
-0
-22
-15 20
-
-
-
-
-
-*/
